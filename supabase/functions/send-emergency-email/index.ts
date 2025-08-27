@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import nodemailer from "npm:nodemailer@6.9.8";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -83,8 +84,18 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send email using Gmail SMTP (simplified for demo)
-    // In production, use a proper SMTP library like nodemailer
+    // Configure Gmail SMTP transporter
+    const transporter = nodemailer.createTransporter({
+      service: "gmail",
+      auth: {
+        user: gmailUser,
+        pass: gmailPass
+      }
+    });
+
+    console.log("SMTP transporter configured for:", gmailUser);
+
+    // Prepare email data
     const emailData = {
       from: `"ImaneSafety" <${gmailUser}>`,
       to: to,
@@ -93,15 +104,22 @@ const handler = async (req: Request): Promise<Response> => {
       text: message
     };
 
-    console.log("Email prepared:", {
+    console.log("Sending email with data:", {
       from: emailData.from,
       to: emailData.to,
-      subject: emailData.subject
+      subject: emailData.subject,
+      textLength: emailData.text.length,
+      htmlLength: emailData.html.length
     });
 
-    // Simulate email sending for demo
-    // In production, implement actual SMTP sending here
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Send the actual email
+    const emailResult = await transporter.sendMail(emailData);
+    
+    console.log("Email sent successfully:", {
+      messageId: emailResult.messageId,
+      response: emailResult.response,
+      alertId
+    });
 
     console.log(`Emergency email sent successfully for alert ${alertId}`);
 
