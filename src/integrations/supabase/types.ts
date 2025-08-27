@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          accuracy: number | null
+          created_at: string
+          emergency_email: string
+          emergency_number: string
+          end_at: string
+          id: string
+          interval_seconds: number
+          last_sent: string | null
+          latitude: number | null
+          location_timestamp: string | null
+          longitude: number | null
+          max_sends: number | null
+          start_at: string
+          status: string
+          total_sent: number | null
+          updated_at: string
+          user_name: string
+        }
+        Insert: {
+          accuracy?: number | null
+          created_at?: string
+          emergency_email: string
+          emergency_number: string
+          end_at: string
+          id?: string
+          interval_seconds?: number
+          last_sent?: string | null
+          latitude?: number | null
+          location_timestamp?: string | null
+          longitude?: number | null
+          max_sends?: number | null
+          start_at?: string
+          status?: string
+          total_sent?: number | null
+          updated_at?: string
+          user_name?: string
+        }
+        Update: {
+          accuracy?: number | null
+          created_at?: string
+          emergency_email?: string
+          emergency_number?: string
+          end_at?: string
+          id?: string
+          interval_seconds?: number
+          last_sent?: string | null
+          latitude?: number | null
+          location_timestamp?: string | null
+          longitude?: number | null
+          max_sends?: number | null
+          start_at?: string
+          status?: string
+          total_sent?: number | null
+          updated_at?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
