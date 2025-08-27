@@ -85,8 +85,11 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     // Configure Gmail SMTP transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: gmailUser,
         pass: gmailPass
@@ -94,6 +97,15 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     console.log("SMTP transporter configured for:", gmailUser);
+    
+    // Test transporter configuration
+    try {
+      await transporter.verify();
+      console.log("SMTP connection verified successfully");
+    } catch (verifyError) {
+      console.error("SMTP verification failed:", verifyError);
+      throw new Error(`SMTP configuration error: ${verifyError.message}`);
+    }
 
     // Prepare email data
     const emailData = {
