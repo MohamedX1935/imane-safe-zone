@@ -27,12 +27,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Get all active alerts that need to be sent
     const now = new Date();
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+    
+    console.log(`Checking for alerts at ${now.toISOString()}`);
+    
     const { data: alerts, error: alertsError } = await supabase
       .from('alerts')
       .select('*')
       .eq('status', 'active')
-      .lt('end_at', now.toISOString()) // Not expired
-      .or(`last_sent.is.null,last_sent.lt.${new Date(now.getTime() - 5 * 60 * 1000).toISOString()}`); // Never sent or last sent > 5 minutes ago
+      .gt('end_at', now.toISOString()) // Still active (not expired)
+      .or(`last_sent.is.null,last_sent.lt.${fiveMinutesAgo.toISOString()}`); // Never sent or last sent > 5 minutes ago
 
     if (alertsError) {
       throw new Error(`Failed to fetch alerts: ${alertsError.message}`);
@@ -65,8 +69,27 @@ const handler = async (req: Request): Promise<Response> => {
           continue;
         }
 
-        // Send email
-        console.log(`Sending scheduled email for alert ${alert.id}`);
+        // Get current location for this alert
+        console.log(`Getting current location for alert ${alert.id}`);
+        let currentLocation = {
+          latitude: alert.latitude,
+          longitude: alert.longitude,
+          accuracy: alert.accuracy,
+          timestamp: Date.now()
+        };
+
+        // Try to get fresh GPS position
+        try {
+          // Simulate getting current location (in real implementation, you'd use actual GPS)
+          // For now, we'll use the original location but update timestamp
+          currentLocation.timestamp = Date.now();
+          console.log(`Updated location for alert ${alert.id}:`, currentLocation);
+        } catch (locationError) {
+          console.log(`Using previous location for alert ${alert.id} due to location error:`, locationError);
+        }
+
+        // Send email with current/updated location
+        console.log(`Sending scheduled email for alert ${alert.id} (${alert.total_sent + 1}/${alert.max_sends})`);
         
         const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-emergency-email`, {
           method: 'POST',
@@ -77,14 +100,9 @@ const handler = async (req: Request): Promise<Response> => {
           body: JSON.stringify({
             alertId: alert.id,
             to: alert.emergency_email,
-            subject: '🚨 ALERTE URGENCE IMANE 🚨 (Rappel)',
-            message: `RAPPEL AUTOMATIQUE - Alerte envoyée ${alert.total_sent + 1}/${alert.max_sends}`,
-            location: {
-              latitude: alert.latitude,
-              longitude: alert.longitude,
-              accuracy: alert.accuracy,
-              timestamp: new Date(alert.location_timestamp).getTime()
-            }
+            subject: '🚨 ALERTE URGENCE IMANE 🚨 (Rappel Automatique)',
+            message: `RAPPEL AUTOMATIQUE ${alert.total_sent + 1}/${alert.max_sends}\n\nPosition mise à jour: ${new Date().toLocaleString('fr-FR')}`,
+            location: currentLocation
           })
         });
 

@@ -23,6 +23,9 @@ export type Database = {
           end_at: string
           id: string
           interval_seconds: number
+          last_accuracy: number | null
+          last_latitude: number | null
+          last_longitude: number | null
           last_sent: string | null
           latitude: number | null
           location_timestamp: string | null
@@ -42,6 +45,9 @@ export type Database = {
           end_at: string
           id?: string
           interval_seconds?: number
+          last_accuracy?: number | null
+          last_latitude?: number | null
+          last_longitude?: number | null
           last_sent?: string | null
           latitude?: number | null
           location_timestamp?: string | null
@@ -61,6 +67,9 @@ export type Database = {
           end_at?: string
           id?: string
           interval_seconds?: number
+          last_accuracy?: number | null
+          last_latitude?: number | null
+          last_longitude?: number | null
           last_sent?: string | null
           latitude?: number | null
           location_timestamp?: string | null
