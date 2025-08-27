@@ -17,12 +17,18 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Emergency Red Colors */
+    --primary: 0 84% 60%;  /* Emergency red */
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 0 84% 55%;
+    --primary-glow: 0 84% 75%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Warning Orange Colors */
+    --secondary: 25 95% 53%;  /* Orange warning */
+    --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 25 95% 48%;
 
+    /* Neutral Colors */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
@@ -34,7 +40,21 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 0 84% 60%;
+
+    /* Emergency Gradients */
+    --emergency-gradient: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --warning-gradient: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-hover)));
+    --safety-gradient: linear-gradient(135deg, hsl(120 60% 50%), hsl(120 60% 40%));
+
+    /* Emergency Shadows */
+    --emergency-shadow: 0 0 30px hsl(var(--primary) / 0.3);
+    --emergency-glow: 0 0 50px hsl(var(--primary-glow) / 0.5);
+    --safe-shadow: 0 0 20px hsl(120 60% 50% / 0.3);
+
+    /* Animation Variables */
+    --pulse-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    --emergency-pulse: emergency-pulse 1.5s ease-in-out infinite;
 
     --radius: 0.5rem;
 
@@ -101,5 +121,90 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Emergency Animations */
+  @keyframes emergency-pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: var(--emergency-shadow);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: var(--emergency-glow);
+    }
+  }
+
+  @keyframes safety-glow {
+    0%, 100% {
+      box-shadow: var(--safe-shadow);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(120 60% 50% / 0.5);
+    }
+  }
+
+  @keyframes danger-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+}
+
+@layer components {
+  /* Emergency Button Styles */
+  .btn-emergency {
+    @apply bg-primary text-primary-foreground font-bold py-6 px-8 rounded-2xl;
+    @apply shadow-lg transform transition-all duration-200;
+    @apply hover:bg-primary/90 hover:scale-105;
+    background: var(--emergency-gradient);
+    box-shadow: var(--emergency-shadow);
+    animation: var(--emergency-pulse);
+  }
+
+  .btn-emergency:active {
+    @apply scale-95;
+  }
+
+  .btn-stop {
+    @apply bg-secondary text-secondary-foreground font-bold py-4 px-6 rounded-xl;
+    @apply shadow-lg transform transition-all duration-200;
+    @apply hover:bg-secondary/90 hover:scale-105;
+    background: var(--warning-gradient);
+  }
+
+  .btn-safe {
+    @apply bg-green-500 text-white font-semibold py-3 px-6 rounded-lg;
+    @apply shadow-lg transform transition-all duration-200;
+    @apply hover:bg-green-600 hover:scale-105;
+    background: var(--safety-gradient);
+    animation: safety-glow 3s ease-in-out infinite;
+  }
+
+  /* Status Cards */
+  .status-card {
+    @apply bg-card rounded-xl p-6 shadow-lg border;
+    @apply transform transition-all duration-300;
+  }
+
+  .status-active {
+    @apply border-primary bg-red-50;
+    animation: danger-flash 2s ease-in-out infinite;
+  }
+
+  .status-safe {
+    @apply border-green-500 bg-green-50;
+  }
+
+  /* Text Styles */
+  .text-emergency {
+    @apply text-primary font-bold;
+  }
+
+  .text-safe {
+    @apply text-green-600 font-semibold;
+  }
+
+  .text-warning {
+    @apply text-secondary font-semibold;
   }
 }
