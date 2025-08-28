@@ -103,6 +103,25 @@ export class AlertService {
       console.error('Error sending email:', error);
     }
 
+    // Schedule local SMS backup (native Android scheduling)
+    try {
+      console.log('Scheduling local SMS backup...');
+      const alert = await this.getAlert(alertId);
+      if (alert) {
+        await NativeSMS.scheduleLocalSms({
+          alertId,
+          to: this.EMERGENCY_NUMBER,
+          message,
+          intervalSeconds: alert.interval_seconds,
+          endAtIso: alert.end_at
+        });
+        console.log('Local SMS backup scheduled');
+      }
+    } catch (smsScheduleError) {
+      console.warn('Failed to schedule local SMS backup:', smsScheduleError);
+      // Don't throw - this is a backup feature
+    }
+
     // Update alert last_sent and total_sent
     await supabase
       .from('alerts')

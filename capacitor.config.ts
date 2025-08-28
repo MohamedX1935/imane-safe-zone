@@ -12,6 +12,9 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       launchShowDuration: 0
+    },
+    Sms: {
+      androidTargetSdk: 30
     }
   }
 };
