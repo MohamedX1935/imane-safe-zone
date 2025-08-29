@@ -61,31 +61,31 @@ export const EmergencyButton = ({ onAlertCreated, disabled }: EmergencyButtonPro
   };
 
   return (
-    <div className="text-center space-y-4">
+    <div className="text-center space-y-3 sm:space-y-4">
       <Button
         onClick={handleSOS}
         disabled={disabled || isLoading}
-        className="btn-emergency w-48 h-48 rounded-full text-2xl font-bold"
+        className="btn-emergency w-32 h-32 sm:w-48 sm:h-48 rounded-full text-lg sm:text-2xl font-bold"
         size="lg"
       >
         {isLoading ? (
-          <>
-            <Loader2 className="w-8 h-8 animate-spin mr-3" />
-            Localisation...
-          </>
+          <div className="flex flex-col items-center">
+            <Loader2 className="w-6 h-6 sm:w-8 sm:h-8 animate-spin mb-1 sm:mb-2" />
+            <span className="text-xs sm:text-sm">Localisation...</span>
+          </div>
         ) : (
-          <>
-            <AlertTriangle className="w-12 h-12 mr-4" />
-            SOS
-          </>
+          <div className="flex flex-col items-center">
+            <AlertTriangle className="w-8 h-8 sm:w-12 sm:h-12 mb-1 sm:mb-2" />
+            <span>SOS</span>
+          </div>
         )}
       </Button>
 
-      <div className="text-center">
-        <p className="text-lg font-semibold text-primary mb-2">
+      <div className="text-center px-4">
+        <p className="text-base sm:text-lg font-semibold text-primary mb-2">
           Appuyez en cas d'urgence
         </p>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+        <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
           Envoi immédiat de votre position par SMS et email, puis toutes les 5 minutes pendant 2 heures
         </p>
       </div>

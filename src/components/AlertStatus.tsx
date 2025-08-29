@@ -100,17 +100,17 @@ export const AlertStatus = ({ alert }: AlertStatusProps) => {
 
         {/* Time Information */}
         {alert.status === 'active' && (
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+            <div className="flex items-center gap-2 justify-center sm:justify-start">
               <Clock className="w-4 h-4 text-muted-foreground" />
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="font-medium">Temps restant</p>
                 <p className="text-primary font-bold">{timeRemaining}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-center sm:justify-start">
               <MessageSquare className="w-4 h-4 text-muted-foreground" />
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="font-medium">Envois restants</p>
                 <p className="text-secondary font-bold">{remainingAlerts}</p>
               </div>
@@ -120,8 +120,8 @@ export const AlertStatus = ({ alert }: AlertStatusProps) => {
 
         {/* Next Send Time */}
         {nextSend && alert.status === 'active' && (
-          <div className="text-center p-3 bg-orange-50 border border-orange-200 rounded-lg">
-            <p className="text-sm font-medium text-orange-800">
+          <div className="text-center p-2 sm:p-3 bg-orange-50 border border-orange-200 rounded-lg">
+            <p className="text-xs sm:text-sm font-medium text-orange-800">
               Prochain envoi: {nextSend.toLocaleTimeString('fr-FR')}
             </p>
           </div>
@@ -129,7 +129,7 @@ export const AlertStatus = ({ alert }: AlertStatusProps) => {
 
         {/* Last Sent */}
         {alert.last_sent && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground justify-center sm:justify-start">
             <Mail className="w-4 h-4" />
             <span>Dernier envoi: {new Date(alert.last_sent).toLocaleString('fr-FR')}</span>
           </div>
@@ -161,7 +161,7 @@ export const AlertStatus = ({ alert }: AlertStatusProps) => {
         )}
 
         {/* Contact Info */}
-        <div className="text-xs text-muted-foreground space-y-1 border-t pt-3">
+        <div className="text-xs text-muted-foreground space-y-1 border-t pt-3 text-center sm:text-left">
           <p>📱 SMS: {alert.emergency_number}</p>
           <p>📧 Email: {alert.emergency_email}</p>
         </div>

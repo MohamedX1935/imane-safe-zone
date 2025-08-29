@@ -60,14 +60,14 @@ export const StopAlert = ({ alertId, onAlertStopped }: StopAlertProps) => {
   return (
     <Card className="status-card status-active max-w-md mx-auto">
       <CardHeader className="text-center">
-        <CardTitle className="text-emergency flex items-center justify-center gap-2">
-          <Shield className="w-6 h-6" />
+        <CardTitle className="text-emergency flex items-center justify-center gap-2 text-base sm:text-lg">
+          <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
           Arrêter l'alerte
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
-          <label htmlFor="stopCode" className="text-sm font-medium">
+          <label htmlFor="stopCode" className="text-xs sm:text-sm font-medium">
             Code d'arrêt d'urgence
           </label>
           <div className="relative">
@@ -79,7 +79,7 @@ export const StopAlert = ({ alertId, onAlertStopped }: StopAlertProps) => {
               onChange={(e) => setStopCode(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Entrez le code secret"
-              className="pl-10"
+              className="pl-10 text-sm sm:text-base"
               disabled={isLoading}
             />
           </div>
@@ -88,7 +88,7 @@ export const StopAlert = ({ alertId, onAlertStopped }: StopAlertProps) => {
         <Button
           onClick={handleStop}
           disabled={isLoading || !stopCode.trim()}
-          className="btn-stop w-full"
+          className="btn-stop w-full text-sm sm:text-base"
           size="lg"
         >
           {isLoading ? (
